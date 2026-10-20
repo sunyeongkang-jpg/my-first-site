@@ -50,7 +50,9 @@ export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.agreed) {
       alert("개인정보 수집 및 이용에 동의해주세요.");
@@ -58,11 +60,30 @@ export default function ContactPage() {
     }
 
     setIsSubmitting(true);
-    // 모의 전송 딜레이
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || "문의 접수 중 문제가 발생했습니다.");
+      }
+
       setIsSubmitted(true);
-    }, 800);
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || "문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -213,6 +234,16 @@ export default function ContactPage() {
                   아래 항목을 작성해주시면 남겨주신 이메일로 답변을 보내드립니다.
                 </p>
               </div>
+
+              {errorMessage && (
+                <div className="mb-5 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm flex items-start gap-2.5">
+                  <span className="font-bold text-base leading-none">⚠️</span>
+                  <div className="flex-1">
+                    <p className="font-semibold">전송 실패</p>
+                    <p className="mt-0.5 text-red-600/90">{errorMessage}</p>
+                  </div>
+                </div>
+              )}
 
               {isSubmitted ? (
                 <div className="py-12 px-6 text-center animate-in fade-in zoom-in-95 duration-300">
