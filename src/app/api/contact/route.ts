@@ -3,7 +3,11 @@ import { Resend } from "resend";
 
 export async function POST(req: Request) {
   try {
-    const apiKey = process.env.RESEND_API_KEY;
+    // 환경변수 자동 정제 (문자열이 뭉쳐서 입력되었거나 접두사가 포함된 경우 자동 추출)
+    const rawApiKey = (process.env.RESEND_API_KEY || "").trim();
+    const keyMatch = rawApiKey.match(/re_[a-zA-Z0-9_-]+/);
+    const apiKey = keyMatch ? keyMatch[0] : rawApiKey;
+
     if (!apiKey || apiKey === "re_your_api_key_here") {
       return NextResponse.json(
         { error: "RESEND_API_KEY가 설정되지 않았거나 유효하지 않습니다." },
@@ -22,8 +26,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
-    const toEmail = process.env.CONTACT_RECEIVER_EMAIL;
+    let fromEmail = (process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev").trim();
+    if (fromEmail.includes("onboarding@resend.dev")) {
+      fromEmail = "onboarding@resend.dev";
+    }
+
+    const rawToEmail = (process.env.CONTACT_RECEIVER_EMAIL || "").trim();
+    const emailMatch = rawToEmail.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+    const toEmail = emailMatch ? emailMatch[0] : rawToEmail;
 
     if (!toEmail || toEmail === "your_email@example.com") {
       return NextResponse.json(
