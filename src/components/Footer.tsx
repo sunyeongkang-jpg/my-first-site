@@ -108,6 +108,11 @@ export default function Footer() {
                   커뮤니티
                 </Link>
               </li>
+              <li>
+                <Link href="/contact" className="hover:text-[#172B4D] text-[#172B4D]/80 transition-colors font-medium">
+                  문의사항
+                </Link>
+              </li>
             </ul>
           </div>
 

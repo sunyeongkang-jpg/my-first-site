@@ -30,6 +30,7 @@ export default function Header() {
     { label: "영화 & 드라마", href: "/media" },
     { label: "일상기록", href: "/daily" },
     { label: "커뮤니티", href: "/community" },
+    { label: "문의사항", href: "/contact" },
   ];
 
   const isActive = (href: string) => {
