@@ -22,14 +22,22 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://my-first-site-eco-green.vercel.app"),
   title: "SY | Small Steps, Big Dreams - 좋아하는 것들로 더 특별한 일상을",
   description:
     "나의 작은 농장, 좋아하는 영화와 드라마, 소소한 일상기록, 그리고 함께 나누는 따뜻한 커뮤니티. 감성 라이프스타일 플랫폼 SY.",
   keywords: ["SY", "Small Steps Big Dreams", "라이프스타일", "텃밭", "영화", "드라마", "일상기록", "커뮤니티"],
   openGraph: {
-    title: "SY | Small Steps, Big Dreams",
-    description: "좋아하는 것들로 더 특별한 일상을 채워가는 감성 라이프스타일 공간",
+    title: "특별한 일상 만들기",
+    description:
+      "안녕하세요. 나만의 특별한 일상에 오신걸 환영합니다. 언제든지 구경하시고 궁금하신 것 있으시면 연락주세요",
+    url: "https://my-first-site-eco-green.vercel.app",
     siteName: "SY",
+    images: [
+      {
+        url: "/images/hero-bg.jpg",
+      },
+    ],
     locale: "ko_KR",
     type: "website",
   },
